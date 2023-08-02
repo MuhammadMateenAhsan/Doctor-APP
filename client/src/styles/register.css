@@ -1,0 +1,13 @@
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Optional: This sets the form container to occupy the full height of the viewport */
+  }
+  .formstyling{
+    padding: 30px;
+    border: 1px solid black;
+    width: 400px;
+    border-top-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+  }

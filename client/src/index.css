@@ -1,0 +1,11 @@
+*{
+  margin: 0%;
+  padding: 0%;
+  box-sizing: border-box;
+}
+.centerSpinner{
+  display: flex;
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}

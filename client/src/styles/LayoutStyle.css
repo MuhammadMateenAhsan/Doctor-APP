@@ -1,0 +1,87 @@
+.main{
+    padding: 10px;
+    height: 100vh;
+}
+.layout{
+    display: flex;
+}
+.sidebar{
+    height: 100vh;    
+    width: 300px;
+    background-color: #222;
+    border-radius: 5px;
+    box-shadow: 0 0 2px gray;
+    color: white;
+    margin-right: 20px;
+}
+.logo{
+    text-align: center;
+    font-size: 1.5rem;
+}
+.white-hr {
+    border: none;
+    border-top: 1px solid white;
+  }
+  
+.content{
+    height: 100%;
+    width: 100%;
+   
+}
+.header{
+    height: 10vh;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 2px gray;
+}
+.body{
+    height: 86vh;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 2px gray;
+}
+
+/* menu items design start*/
+.menu{
+    margin-top: 50px;
+}
+.menu-item{
+    margin-top: 30px;
+}
+.menu-item a{
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+.menu-item i{
+    margin: 0 15px;
+    font-size: 1.2rem;
+}
+/* menu active class design */
+.active{
+    background-color: white;
+    color:  #222;
+    padding: 10px;
+}
+.active i , .active a{
+    color:  #222;
+}
+.header-content{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 40px;
+    margin: 0 15px;
+}
+.header-content i{
+    margin-right: 20px;
+    font-size: 1.2rem;
+}
+.header-content a{
+    text-decoration: none;
+    color: blue;
+    text-transform: uppercase;
+    margin: 0 10px;
+    font-size: 1.2rem;
+}
