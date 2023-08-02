@@ -17,7 +17,7 @@ const connectDB = async()=>{
 module.exports = connectDB
 
 
-// const connection = 'mongodb+srv://admin1:admin1@cluster0.bg3xe5n.mongodb.net/doctorapp' 
+// const connection = '' 
 // mongoose.connect(connection, config)
 // .then(() =>console.log('Connected to Mongo'))
 // .catch(err => console.log('Error', err))
