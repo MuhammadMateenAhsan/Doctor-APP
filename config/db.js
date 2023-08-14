@@ -17,7 +17,14 @@ const connectDB = async()=>{
 module.exports = connectDB
 
 
-// const connection = '' 
+// const connection = 'enteryour uri' 
 // mongoose.connect(connection, config)
 // .then(() =>console.log('Connected to Mongo'))
 // .catch(err => console.log('Error', err))
+
+
+
+
+
+
+

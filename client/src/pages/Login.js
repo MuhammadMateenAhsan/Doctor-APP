@@ -16,6 +16,7 @@ const Login = () => {
         window.location.reload()
         dispatch(hideLoading())
         if(res.data.success){
+          // whenever someone login token will be generated 
           localStorage.setItem('token', res.data.token)
           message.success('Login Successfully!')
           Navigate('/')
