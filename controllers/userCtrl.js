@@ -2,6 +2,7 @@ const userModel = require('../models/userModels')
 const bcrypt = require('bcryptjs')
 const jwt = require("jsonwebtoken")
 const doctorModel = require("../models/doctorModel")
+const appointmentModel = require("../models/appointmentModel")
 
 const registerController = async(req,res) => {
     try {
@@ -151,4 +152,55 @@ try {
       })
     }
   }
-  module.exports = { loginController, registerController, authController ,applyDoctorController ,getAllNotificationController , deleteAllNotificationController};
+
+  // get all doctors ctrl
+  const getAllDoctorsController = async(req,res)=>{
+    try {
+      const doctors = await doctorModel.find({status:'approved'})
+      res.status(200).send({
+        success:true,
+        message:"Doctors List fetched successfully",
+        data:doctors,
+      })
+    } catch (error) {
+      console.log(error)
+      res.status(500).send({
+        success: false ,
+        message:'error while fetching the all doctors',
+        error
+      })
+    }
+  }
+
+const bookAppointmentController = async(req,res)=>{
+  try {
+    req.body.status = "pending"
+    const newAppointment = new appointmentModel(req.body)
+    await newAppointment.save()
+    // const user = await userModel.findOne({_id:req.body.userId})
+    const user = await userModel.findOne({_id:req.body.userId})
+    console.log("here is doctor id "+user)
+    user.notification.push({
+      type:"new-appointment-request",
+      message:`A new appointment request from ${req.body.userInfo.name}`,
+      onClickPath:'/user/appointments',
+    })
+    await user.save()
+    res.status(200).send({
+      success:true,
+      message:"New Appointment Request Sent Successfully",
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({
+      success:false,
+      message:"server error while booking an appointment",
+      error
+    })
+  }
+}
+
+
+
+
+  module.exports = { loginController, registerController, authController ,applyDoctorController ,getAllNotificationController , deleteAllNotificationController , getAllDoctorsController, bookAppointmentController};

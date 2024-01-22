@@ -5,6 +5,7 @@ import axios from "axios"
 import {useNavigate} from "react-router-dom"
 import { useSelector , useDispatch } from 'react-redux';
 import {showLoading , hideLoading} from "../redux/features/alertSlice.js"
+import moment from 'moment'
 
 const ApplyDoctor = () => {
     const navigate = useNavigate()
@@ -13,7 +14,10 @@ const ApplyDoctor = () => {
     const handleFinish = async(values) => {
         try {
         dispatch(showLoading())
-            const res = await axios.post("/api/v1/user/apply-doctor", {...values, userId:user._id},
+            const res = await axios.post("/api/v1/user/apply-doctor", {...values, userId:user._id, timings:[
+                moment(values.timings[0].format('HH:mm')),
+                moment(values.timings[1].format('HH:mm'))
+            ]},
             {
                 headers:{
                     Authorization:`Bearer ${localStorage.getItem("token")}`
@@ -122,7 +126,7 @@ const ApplyDoctor = () => {
     <Form.Item 
         label="Fees Per Consultation"
         name="feesPerConsultation"
-        rules={[{ required: true, type: 'text' }]}
+        rules={[{ required: true }]}
     >
         <Input type="number" placeholder='Your Fees'/>
     </Form.Item>
