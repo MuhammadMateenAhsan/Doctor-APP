@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "routes": [
+    "router": [
       {
         "src": "/(.*)",
         "dest": "/index.html"
