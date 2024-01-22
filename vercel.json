@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "router": [
+    "rewrites": [
       {
         "src": "/(.*)",
         "dest": "/index.html"
