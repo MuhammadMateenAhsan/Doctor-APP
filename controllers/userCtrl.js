@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require("jsonwebtoken")
 const doctorModel = require("../models/doctorModel")
 const appointmentModel = require("../models/appointmentModel")
-
+const moment = require('moment')
 const registerController = async(req,res) => {
     try {
         const existingUser = await userModel.findOne({email:req.body.email})
@@ -174,12 +174,14 @@ try {
 
 const bookAppointmentController = async(req,res)=>{
   try {
+    req.body.date = moment(req.body.date,"DD-MM-YYYY").toISOString();
+    req.body.time = moment(req.body.time,"HH:mm").toISOString();
     req.body.status = "pending"
     const newAppointment = new appointmentModel(req.body)
     await newAppointment.save()
     // const user = await userModel.findOne({_id:req.body.userId})
     const user = await userModel.findOne({_id:req.body.userId})
-    console.log("here is doctor id "+user)
+    console.log("here is doctor "+user)
     user.notification.push({
       type:"new-appointment-request",
       message:`A new appointment request from ${req.body.userInfo.name}`,
@@ -202,5 +204,39 @@ const bookAppointmentController = async(req,res)=>{
 
 
 
+const bookingAvailabilityController = async(req,res)=>{
+  try {
+    const date = moment(req.body.date,"DD-MM-YYYY").toISOString();
+    const fromTime = moment(req.body.time,"HH:mm").subtract(1,"hours").toISOString();
+    const toTime = moment(req.body.time,"HH:mm").add(1,"hours").toISOString();
+    const doctorId = req.body.doctorId;
+    const appointments = appointmentModel.findOne({
+      doctorId,
+      date,
+      time:{
+        $gte:fromTime, $lte:toTime
+      }
+    })
+    if(appointments.length > 0){
+      return res.status(200).send({
+        success:true,
+        message:"appointment is not avaiable at this time"
+      })
+    }else{
+      return res.status(200).send({
+        success:true,
+        message:"appointment is available"
+      })
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({
+      status:false,
+      message:"Server Error While Fetching Booking Availability",
+      error
+    })
+  }
+}
 
-  module.exports = { loginController, registerController, authController ,applyDoctorController ,getAllNotificationController , deleteAllNotificationController , getAllDoctorsController, bookAppointmentController};
+
+  module.exports = { loginController, registerController, authController ,applyDoctorController ,getAllNotificationController , deleteAllNotificationController , getAllDoctorsController, bookAppointmentController , bookingAvailabilityController};

@@ -34,7 +34,10 @@ const BookingPage = () => {
     }
     const handleBooking = async()=>{
       try {
-        dispatch(showLoading)
+        if(!date && !time){
+          return alert("date & time required")
+        }
+        dispatch(showLoading())
         const response = await axios.post('/api/v1/user/book-appointment',
         {
           doctorId:params.doctorId,
@@ -51,7 +54,35 @@ const BookingPage = () => {
         )
         dispatch(hideLoading())
         if(response.data.success){
+          setIsAvailable(true)
           message.success(response.data.message)
+        }else{
+          setIsAvailable(false)
+          message.error(response.data.message)
+        }
+      } catch (error) {
+        dispatch(hideLoading())
+        console.log(error)
+      }
+    }
+
+    // handle booking Availability function
+    const handleAvailability = async()=>{
+      try {
+        dispatch(showLoading())
+        const response = await axios.post('/api/v1/user/booking-Availability',
+        {doctorId:params.doctorId,date,time},
+        {
+          headers:{
+            Authorization:`Bearer ${localStorage.getItem("token")}`
+          }
+        })
+        dispatch(hideLoading())
+        if(response.data.success){
+          setIsAvailable(true)
+          message.success(response.data.message)
+        }else{
+          message.error(response.data.message)
         }
       } catch (error) {
         dispatch(hideLoading())
@@ -80,10 +111,6 @@ const BookingPage = () => {
             <p>
                 <b>Fees Per Consultation:</b>  {doctors.feesPerConsultation}
             </p>
-            {/* <p>
-  <b>Timings:</b> {moment(doctors.timings[0]).format("HH:mm A")} - to - {moment(doctors.timings[1]).format("HH:mm A")}
-</p> */}
-
 {doctors.timings && doctors.timings.length === 2 ? (
           <p>
             <b>Timings:</b>{" "}
@@ -95,14 +122,23 @@ const BookingPage = () => {
         )}
 
             <div className='d-flex flex-column w-50'>
-                <DatePicker format="DD-MM-YYYY" onChange={(value)=>setDate(moment(value).format("DD-MM-YYYY"))}/>
-                <TimePicker format="HH:mm" className='mt-1' onChange={(value)=>setTime(
+            <DatePicker format="DD-MM-YYYY" onChange={(value)=>{
+              setIsAvailable(false)
+              setDate(moment(value).format("DD-MM-YYYY"))
+            }}/>
+                <TimePicker format="HH:mm" className='mt-1' onChange={(value)=>{
+                 setIsAvailable(false)
+                 setTime(
                     moment(value).format("HH:mm")
                 )
+                }
                 }/>
             </div>
-            <button type="submit" className="btn btn-primary mt-3 m-2">Check Availability</button>
+            <button type="submit" className="btn btn-primary mt-3 m-2" onClick={handleAvailability}>Check Availability</button>
+           {!isAvailable && (
             <button type="submit" className="btn text-white mt-3 bg-dark m-2" onClick={handleBooking}>Book Appointment</button>
+           )}
+           
         </div>
     </div>
     )
